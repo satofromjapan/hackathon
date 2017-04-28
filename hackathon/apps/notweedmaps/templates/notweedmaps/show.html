@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Home Page</title>
+    <style>
+      #map {
+        height:100%;
+        width: 100%;
+       }
+       html, body {
+        height: 95%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-
+    <h3>Not Weed Maps</h3>
+    <div id="map"></div>
+    <script>
+      var test = "{{arr}}";
+      function initMap() {
+        var sanfan = {lat: 37.763358, lng: -122.434265};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom:11,
+          center: sanfan
+        });
+      }
+      console.log(test)
+        var marker = new google.maps.Marker({
+          position: sanfan,
+          map: map
+        });
+          // for (x in test) {
+          // var latLng = new google.maps.LatLng(sanfan['lat'], sanfan['lng']);
+          // var marker = new google.maps.Marker({
+          //     position: latLng,
+          //     map: map,
+          //     title: data.business_name
+          // });
+        //}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpPcpLV69gERAsO6Fe7iE-dFUyi8vrNAI&callback=initMap">
+    </script>
   </body>
 </html>

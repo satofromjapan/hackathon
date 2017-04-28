@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map {
+        height:100%;
+        width: 100%;
+       }
+       html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <h3>Not Weed Maps</h3>
+    <script>
+      var test = "{{arr}}";
+      function initMap() {
+        var sanfan = {lat: 37.763358, lng: -122.434265};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom:11,
+          center: sanfan
+        });
+        // var url = document.createElement('script')
+        // script.src = "https://data.sfgov.org/api/views/8r8e-q58k/rows.json?accessType=DOWNLOAD";
+        // document.getElementsByTagName('head')[0].appendChild(script);
+      }
+      // $(document).ready
+      $(document).ready(function(){
+        window.onload = function() {
+
+		// Creating a new map
+		// var map = new google.maps.Map(document.getElementById("map"), {
+    //       center: new google.maps.LatLng(57.9, 14.6),
+    //       zoom: 6,
+    //       mapTypeId: google.maps.MapTypeId.ROADMAP
+    //     });
+
+        // url = "https://data.sfgov.org/api/views/8r8e-q58k/rows.json";
+        //var json = [];
+            // var j = [];
+          // $.get(url , function(res) {
+          //   //  var j = [];
+          //   console.log(res);
+          //   for(var i = 0; i < res.data.length; i++){
+          //     str1 = res.data[i][9];
+          //     str1 = str1.substring(7,str1.length-1);
+          //     latlong = str1.split(" ");
+          //    j.push(
+          //      {business_name  : res.data[i][8],
+          //       lat : latlong[1],
+          //       lng : latlong[0],
+          //       address : res.data[i][11]+ " "+ res.data[i][12]+ " "  +res.data[i][13] + " " +res.data[i][14],
+          //       zipcode : res.data[i][14],
+          //       neighborhood : res.data[i][19],
+          //       location_type : res.data[i][18],
+          //       id : res.data[i][24]
+          //     });
+          //   }
+          //
+          //   console.log("inside get: ", j);
+          // }, "json");
+		// Creating the JSON data
+		var j = test
+    console.log(j);
+		// Creating a global infoWindow object that will be reused by all markers
+    // console.log("Above infowindow");
+    // console.log("Outside get", j);
+		var infoWindow = new google.maps.InfoWindow();
+  // console.log("vedchbdcikhcdu");
+		// Looping through the JSON data
+		for (var i = 0; i < j.length; i++) {
+      // console.log("Inside....");
+      // console.log(j[i]);
+			var data = j[i],
+				latLng = new google.maps.LatLng(data.lat, data.lng);
+
+			// Creating a marker and putting it on the map
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map,
+				title: data.business_name
+			});
+
+			// Creating a closure to retain the correct data, notice how I pass the current data in the loop into the closure (marker, data)
+			(function(marker, data) {
+
+				// Attaching a click event to the current marker
+				google.maps.event.addListener(marker, "click", function(e) {
+					infoWindow.setContent(data.description);
+					infoWindow.open(map, marker);
+				});
+
+
+			})(marker, data);
+
+		}
+
+	}
+
+})();
+      //   url = "https://data.sfgov.org/api/views/8r8e-q58k/rows.json?accessType=DOWNLOAD";
+      //   $.get(url , function(res) {
+      //     console.log(res);
+      //     var arr = [];
+      //     for(var i = 0; i < res.data.length; i++){
+      //       str1 = res.data[i][9];
+      //       str1 = str1.substring(7,str1.length-1);
+      //       latlong = str1.split(" ");
+      //      arr.push(
+      //        {business_name  : res.data[i][8],
+      //         lat : latlong[1],
+      //         lng : latlong[0],
+      //         address : res.data[i][11]+ " "+ res.data[i][12]+ " "  +res.data[i][13] + " " +res.data[i][14],
+      //         zipcode : res.data[i][14],
+      //         neighborhood : res.data[i][19],
+      //         location_type : res.data[i][18],
+      //         id : res.data[i][24]
+      //       });
+      //     }
+      //     // var json1 = {'data':arr}
+      //     // console.log(json1)
+      //     eqfeed_callback(arr)
+      //     function eqfeed_callback(arr) {
+      //       console.log("Inside main")
+      //       for (var i = 0; i < arr.length; i++) {
+      //       var latLng = new google.maps.LatLng(arr[i].lat, arr[i].lng);
+      //       var marker = new google.maps.Marker({
+      //           position: latLng,
+      //           map: map,
+      //           // icon: icon,
+      //           // title: data.title
+      //       });
+      //     }
+      //     map.data.addGeoJson(arr);
+      //     }
+      //     // console.log(json1)
+      //   }, "json");
+      //
+      //
+      //   window.eqfeed_callback = function(json1) {
+      //     console.log("Inside callback")
+      //       for (var i = 0; i < data.length; i++) {
+      //       var latLng = new google.maps.LatLng(data[i].lat, data[i].lng);
+      //       var marker = new google.maps.Marker({
+      //           position: latLng,
+      //           map: map,
+      //           // icon: icon,
+      //           title: data.title
+      //       });
+      //     }
+      //   }
+      // });
+      // // function eqfeed_callback(json1) {
+      // //   console.log("Inside main")
+      // //   map.data.addGeoJson(json1);
+      // // }
+      // // window.eqfeed_callback = function(json1) {
+      // //   console.log("Inside callback")
+      // //     for (var i = 0; i < data.length; i++) {
+      // //     var latLng = new google.maps.LatLng(data[i].lat, data[i].lng);
+      // //     var marker = new google.maps.Marker({
+      // //         position: latLng,
+      // //         map: map,
+      // //         // icon: icon,
+      // //         title: data.title
+      // //     });
+      // //   }
+      // // }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpPcpLV69gERAsO6Fe7iE-dFUyi8vrNAI&callback=initMap">
+    </script>
+  </body>
+</html>
