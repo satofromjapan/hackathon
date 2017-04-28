@@ -18,105 +18,58 @@
     <div id="map"></div>
     <h3>Not Weed Maps</h3>
     <script>
-    var coord = []
-      function initMap() {
+
+   $(document).ready(function(){
+
+     function initMap() {
         var sanfan = {lat: 37.763358, lng: -122.434265};
         var mapOptions = {
           zoom:11,
           center: sanfan
         }
         var map = new google.maps.Map(document.getElementById('map'), mapOptions)
-      //  console.log(datacollect());
-        // var data = j[i];
-        // console.log("long", data.lng);
-        arr = [{lat : 37.729774121091744, lng: -122.43064530711257},
-                {lat : 37.776067021942126, lng: -122.43852349455584}];
-      //  latLng = new google.maps.LatLng(37.729774121091744, -122.43064530711257);
-      //  console.log("hardcode:", latLng);
-        // Creating a marker and putting it on the map
-        // console.log("Co ord: ", coord);
-        console.log(coord.length);
-        console.log(coord)
-        for (var i = 0; i < arr.length; i++){
-        // for (i in coord){
-          // latLng = {lat : coord[i].lat, lng : coord[i].lng}
-          // console.log("Co ord: ", latLng);
+      //  console.log("data", datacollect());
+      //  console.log("type:", typeof datacollect());
+      url = "https://data.sfgov.org/api/views/8r8e-q58k/rows.json?accessType=DOWNLOAD";
+      var j = []; var latLng;
+      var coord = [];
+      $.get(url , function(res) {
+        console.log("results:", res);
+        for(var i = 0; i < res.data.length; i++){
+          str1 = res.data[i][9];
+          str1 = str1.substring(7,str1.length-1);
+          latlong = str1.split(" ");
+         j.push(
+           {business_name  : res.data[i][8],
+            lat : latlong[1],
+            lng : latlong[0],
+            address : res.data[i][11]+ " "+ res.data[i][12]+ " "  +res.data[i][13] + " " +res.data[i][14],
+            zipcode : res.data[i][14],
+            neighborhood : res.data[i][19],
+            location_type : res.data[i][18],
+            id : res.data[i][24]
+          });
+        coord.push({lat : parseFloat(latlong[1]), lng : parseFloat(latlong[0])})
+      }
+      console.log("inside get", coord, typeof coord);
+
+     // all your code here
+      console.log("now coords is populated", coord);
+      for (i in coord){
+        console.log("coord",coord[i].lat);
+        var image = "https://cdn0.iconfinder.com/data/icons/nature-1-2/512/marijuana-128.png";
         var marker = new google.maps.Marker({
-          position: arr[i],
+          icon: image,
+          position: coord[i],
           map: map,
-          // title: data.business_name
         });
-    }
+      }
+    }, "json");
   }
-      $(document).ready(function(){
-        var j = [];
-        url = "https://data.sfgov.org/api/views/8r8e-q58k/rows.json?accessType=DOWNLOAD";
-        //var json = [];
-            // var j = [];
-          function datacollect(){
-            var j = []; var latLng;
-            $.get(url , function(res) {
-            console.log(res);
-            for(var i = 0; i < res.data.length; i++){
-              str1 = res.data[i][9];
-              str1 = str1.substring(7,str1.length-1);
-              latlong = str1.split(" ");
-             j.push(
-               {business_name  : res.data[i][8],
-                lat : latlong[1],
-                lng : latlong[0],
-                address : res.data[i][11]+ " "+ res.data[i][12]+ " "  +res.data[i][13] + " " +res.data[i][14],
-                zipcode : res.data[i][14],
-                neighborhood : res.data[i][19],
-                location_type : res.data[i][18],
-                id : res.data[i][24]
-              });
-              coord.push({lat : latlong[1], lng : latlong[0]})
-              // latLng = {lat : parseFloat(latlong[1]), lng : parseFloat(latlong[0])}
-              // console.log(latLng);
-              // var marker = new google.maps.Marker({
-              //   position: latLng,
-              //   setMap: map,
-              //   // title: data.business_name
-              // });
-            }
-            console.log("inside get");
-            // mark(j)
-          }, "json");
-          return coord;
-        }
 
-        j = datacollect()
-      		// Creating a global infoWindow object that will be reused by all markers
-          // function mark(j){
-  		    //   for (var i = 0, length = j.length; i < length; i++) {
-          //     console.log("Inside....");
-          //     console.log(j[i]);
-    			//     var data = j[i];
-          //     console.log("long", data.lng);
-    			// 	  // latLng = {lat : parseFloat(data.lat), lng: parseFloat(data.lng)}
-          //     latLng = new google.maps.LatLng(parseFloat(data.lat), parseFloat(data.lng));
-          //     console.log("Latlong:", latLng);
-        	// 		// Creating a marker and putting it on the map
-        	// 		var marker = new google.maps.Marker({
-        	// 			position: latLng,
-        	// 			setMap: map,
-        	// 			title: data.business_name
-        	// 		});
-          //     // marker.setMap(map);
-          //
-        	// 		// Creating a closure to retain the correct data, notice how I pass the current data in the loop into the closure (marker, data)
-        	// 		(function(marker, data) {
-        	// 			// Attaching a click event to the current marker
-        	// 			google.maps.event.addListener(marker, "click", function(e) {
-        	// 			infoWindow.setContent(data.description);
-        	// 			infoWindow.open(map, marker);
-        	// 			});
-        	// 		})(marker, data);
-  		    //   }
-  	      // }
+ initMap()
 
-})(); //end of document.ready
+}); //end of document.ready
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpPcpLV69gERAsO6Fe7iE-dFUyi8vrNAI&callback=initMap">
